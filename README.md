@@ -11,13 +11,13 @@ Crea una instancia de `LoggerConfig` para definir las rutas de los archivos de l
 * Establecer una ruta global para todos los logs:
 
 ```java
-config.setRutaDefinitiva("/ruta/a/log.log");
+config.establecerRuta("/home/xxx/log.log");
 ```
 
 * Asignar rutas específicas por clase:
 
 ```java
-config.añadirRuta(MiClase.class, "/ruta/especifica.log");
+config.añadirRutaPorClase(MiClase.class, "/home/xxx/log.log");
 ```
 
 ---
@@ -47,13 +47,13 @@ import es.sergiopt.impl.Logger;
 
 // Configuración
 LoggerConfig config = new LoggerConfig();
-config.setRutaDefinitiva("/home/xxx/log.log");
+config.establecerRuta("/home/xxx/log.log");
 
 // Obtener logger
 LoggerBuilder.cargarConfiguracion(config);
 Logger logger = LoggerBuilder.getLogger(MiClase.class);
 
-// Loggear
+// Usar
 logger.info("Mensaje de info :)");
 ```
 

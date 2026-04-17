@@ -1,6 +1,6 @@
-package es.sergiopt.config;
+package es.sergiopt.configuracion;
 
-import es.sergiopt.impl.Logger;
+import es.sergiopt.logger.Logger;
 
 public class LoggerBuilder {
     private static LoggerConfig config;
@@ -9,7 +9,7 @@ public class LoggerBuilder {
      * 
      * Cargar configuración necesaria para la escritura de .log
      * 
-     * @param config configuracion de ficheros .log
+     * @param config configuracion de rutas de ficheros .log
      */
     public static void cargarConfiguracion(LoggerConfig config) {
         LoggerBuilder.config = config;
@@ -19,8 +19,8 @@ public class LoggerBuilder {
      * 
      * Se debe cargar una configuración antes de obtener logger.
      * 
-     * @param clazz la clase donde se está haciendo la llamada.
-     * @return logger con respectiva configuración.
+     * @param clazz la clase desde donde se está llamando este método
+     * @return logger
      */
     public static Logger getLogger(Class<?> clazz) {
         if (config == null) {
