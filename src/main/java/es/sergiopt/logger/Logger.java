@@ -34,7 +34,7 @@ public class Logger {
         // Obtener archivo de escritura
         String archivo = "";
         if (config.getRutas().containsKey(clazz)) {
-            archivo = config.getRutas().get(clazz).toString();
+            archivo = config.getRutas().get(clazz);
         } else if (config.getRuta() != null) {
             archivo = config.getRuta();
         } else {
@@ -44,20 +44,21 @@ public class Logger {
         }
 
         // Procesar error
-        String mensajeCompleto = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS) + " " + nivel + " - " + mensaje + "\n";
+        StringBuilder sbMensaje = new StringBuilder();
+        sbMensaje.append(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)).append(" ").append(clazz.getName()).append(" ").append(nivel).append(" - ").append(mensaje).append("\n");
         if (exception != null) {
             // Obtener mensaje de error
-            StringWriter writer = new StringWriter();
-            PrintWriter mensajeExcepcion = new PrintWriter(writer);
-            exception.printStackTrace(mensajeExcepcion);
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            exception.printStackTrace(pw);
 
             // Completar mensaje
-            mensajeCompleto += writer.toString() + "\n";
+            sbMensaje.append(sw).append("\n");
         }
 
         try {
             // Realizar escritura
-            Files.writeString(Paths.get(archivo), mensajeCompleto, StandardOpenOption.CREATE, StandardOpenOption.APPEND); // crear + añadir por final
+            Files.writeString(Paths.get(archivo), sbMensaje, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
         } catch (IOException e) {
             System.err.println("Error de E/S en archivo {" + archivo + "} :(");
