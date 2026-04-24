@@ -22,37 +22,27 @@ public class Logger {
     private static final String WARNING = "[WARNING]";
     private static final String ERROR = "[ERROR]";
 
-    private LoggerConfig config;
     private Class<?> clazz;
 
-    public Logger(LoggerConfig config, Class<?> clazz) {
-        this.config = config;
-        this.clazz = clazz;
-    }
+    public Logger(Class<?> clazz) {this.clazz = clazz;}
 
     private void escribir(String nivel, String mensaje, Exception exception) {
-        // Obtener archivo de escritura
-        String archivo = "";
-        if (config.getRutas().containsKey(clazz)) {
-            archivo = config.getRutas().get(clazz);
-        } else if (config.getRuta() != null) {
-            archivo = config.getRuta();
-        } else {
-            // Caso donde esta clase no tiene .log asociado
-            System.out.println("{" + clazz.getName() + "} no tiene .log asociado :(");
-            return;
+        if (LoggerConfig.getRutaPorClase(clazz) == null) {
+            System.out.println("La configuración no devuelve ninguna ruta :( ¿arhivo src/main/resources/sjl-config.properties sin configurar?");
+            return;  
         }
 
-        // Procesar error
+        String archivo = LoggerConfig.getRutaPorClase(clazz);
+
+        // Procesar mensaje
         StringBuilder sbMensaje = new StringBuilder();
         sbMensaje.append(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS)).append(" ").append(clazz.getName()).append(" ").append(nivel).append(" - ").append(mensaje).append("\n");
+        
+        // Obtener mensaje de error
         if (exception != null) {
-            // Obtener mensaje de error
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             exception.printStackTrace(pw);
-
-            // Completar mensaje
             sbMensaje.append(sw).append("\n");
         }
 

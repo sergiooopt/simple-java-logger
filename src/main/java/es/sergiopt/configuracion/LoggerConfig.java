@@ -1,52 +1,30 @@
 package es.sergiopt.configuracion;
 
-import java.util.Map;
-import java.util.HashMap;
+import java.util.Properties;
+import java.io.IOException;
 
-/**
- * 
- * Configuración de rutas de archivos de logger. Hay dos opciones: <br>
- * 
- * - Modificar {@code ruta}, donde todas las clases se escribiran aqui excepto las que esten definidas en {@code rutas}. <br>
- * - Modificar {@code rutas}, donde cada clase tiene su correspondiente fichero .log
- * 
- */
 public class LoggerConfig {
-    private String ruta;
-    private Map<Class<?>, String> rutas;
+    private static Properties properties;
 
-    public LoggerConfig() {
-        // Copilot dice que HashMap no necesita implementar Comparable
-        rutas = new HashMap<>();
+    private LoggerConfig() {}
+
+    // Bloque de código que se ejecuta junto al arranque de la aplicación
+    static {
+        try {
+            properties = new Properties();
+            properties.load(LoggerConfig.class.getClassLoader().getResourceAsStream("sjl-config.properties"));
+
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo {sjl-config.properties} :(");
+            e.printStackTrace();
+        }
     }
 
-    public String getRuta() {
-        return ruta;
+    public static String getRutaGeneral() {
+        return properties.getProperty("logger.ruta.general");
     }
 
-    public Map<Class<?>, String> getRutas() {
-        return rutas;
-    }
-
-    /**
-     * 
-     * Este método modifica la propiedad {@code ruta}.
-     * 
-     * @param ruta el nombre del fichero .log
-     */
-    public void establecerRuta(String ruta) {
-        this.ruta = ruta;
-    }
-
-    /**
-     * 
-     * Este método permite asociar por cada clase un .log distinto.
-     * 
-     * @param clazz la clase asociada a la ruta
-     * @param ruta el nombre del fichero .log
-     */
-    public void añadirRutaPorClase(Class<?> clazz, String ruta) {
-        if (rutas.containsKey(clazz)) rutas.replace(clazz, ruta);
-        rutas.put(clazz, ruta);
+    public static String getRutaPorClase(Class<?> clazz) {
+        return properties.getProperty("logger.ruta." + clazz.getName(), getRutaGeneral());
     }
 }

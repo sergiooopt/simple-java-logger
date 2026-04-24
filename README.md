@@ -6,31 +6,35 @@ Un logger simple y configurable para aplicaciones Java, que permite escribir men
 
 ### Configuración
 
-Crea una instancia de `LoggerConfig` para definir las rutas de los archivos de log. Puedes:
+En `src/main/resources` dentro del proyecto creamos `sjl-config.properties`.
 
-* Establecer una ruta global para todos los logs:
+La clase `LoggerConfig` va a leer dos parámetros en este archivo:
+
+* Ruta general:
 
 ```java
-config.establecerRuta("/home/xxx/log.log");
+logger.ruta.general=<ruta a log>
 ```
 
-* Asignar rutas específicas por clase:
+* Ruta específica por clase:
 
 ```java
-config.añadirRutaPorClase(MiClase.class, "/home/xxx/log.log");
+logger.ruta.<clase java>=<ruta a log>
 ```
 
 ---
 
 ### Obtención del Logger
 
-Usa `LoggerBuilder` para cargar la configuración y obtener un logger para una clase específica. Esto asegura que la configuración esté cargada antes de usar el logger.
+La configuración se carga automáticamente mediante el archivo `sjl-config.properties`.
+
+Para usar un logger se puede instanciar con `LoggerBuilder.getLogger()`.
 
 ---
 
 ### Logging
 
-El logger escribe mensajes en el archivo correspondiente en los niveles:
+El logger escribe mensajes en archivo/archivos configurados en los niveles:
 
 * `[INFO]`
 * `[WARNING]`
@@ -41,20 +45,14 @@ El logger escribe mensajes en el archivo correspondiente en los niveles:
 ## Ejemplo de Uso
 
 ```java
-import es.sergiopt.config.LoggerConfig;
-import es.sergiopt.config.LoggerBuilder;
-import es.sergiopt.impl.Logger;
+public class Main {
+  
+  private static Logger logger = LoggerBuilder.getLogger();
 
-// Configuración
-LoggerConfig config = new LoggerConfig();
-config.establecerRuta("/home/xxx/log.log");
-
-// Obtener logger
-LoggerBuilder.cargarConfiguracion(config);
-Logger logger = LoggerBuilder.getLogger(MiClase.class);
-
-// Usar
-logger.info("Mensaje de info :)");
+  public static void main(String[] args) {
+    logger.info("Hola Mundo :)");
+  }
+}
 ```
 
 ---
@@ -62,17 +60,16 @@ logger.info("Mensaje de info :)");
 ## Estructura del Proyecto
 
 * **LoggerConfig**
-  Gestiona las rutas de los archivos de log.
+  Lee el archivo `sjl-config.properties` y obtiene las rutas.
 
 * **LoggerBuilder**
-  Crea las instancias de `Logger` con la configuración correspondiente.
+  Crea las instancias de `Logger`.
 
 * **Logger**
-  Encargada de escribir los mensajes en los archivos.
+  Escribe los mensajes en los archivos configurados.
 
 ---
 
 ## Notas
 
-Este logger esta creado a modo de mini proyecto personal. Tengo intenciones de volverlo más complejo
-según vaya pasando el tiempo.
+Este logger esta creado a modo de proyecto personal.

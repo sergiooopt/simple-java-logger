@@ -1,0 +1,6 @@
+2026-04-24T17:54:47 es.sergiopt.logger.Main [INFO] - Mensaje de info :)
+2026-04-24T17:54:47 es.sergiopt.logger.Main [ERROR] - Error al procesar el array :(
+java.lang.ArrayIndexOutOfBoundsException: Index 3 out of bounds for length 3
+	at es.sergiopt.logger.Main.probarMensajeError(Main.java:22)
+	at es.sergiopt.logger.Main.main(Main.java:11)
+
